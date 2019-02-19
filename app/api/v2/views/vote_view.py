@@ -37,6 +37,9 @@ def save():
 
 @vote_route.route('',methods=['GET'])
 def get_votes():
+    """
+        get all the votes
+    """
 
     votes = vote_model.Vote()
 
