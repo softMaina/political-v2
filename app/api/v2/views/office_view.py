@@ -67,12 +67,12 @@ def get_offices():
 
         return make_response(jsonify({
             'status':404,
-            'error':'There are no registered offices yer'
+            'error':'There are no registered offices yet'
         }),404)
     
     response = jsonify({
-            'message': "Successfully fetched all the offices",
-            'products': all_offices
+            'status': 200,
+            'data': all_offices
             })
 
     response.status_code = 200

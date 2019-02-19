@@ -55,7 +55,7 @@ def save():
     PARTY.save(name, hqaddress,logoUrl)
 
     return make_response(jsonify({
-            "message": "Party added successfully",
+            "status": 201,
             "party": {
                 "name":name,
                 "hqaddress": hqaddress,
