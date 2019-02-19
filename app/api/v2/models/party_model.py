@@ -30,4 +30,9 @@ class Party(object):
         """
         query = """SELECT * FROM parties"""
         return database.select_from_db(query)
-    
+
+    def update(self, party_id, party_logoUrl, party_hqaddress, party_name):
+
+        query = """UPDATE parties SET name = '{}',hqaddress = '{}', logourl = '{}' WHERE party_id = '{}' """.format(party_name,party_hqaddress, party_logoUrl,party_id)
+
+        database.insert_to_db(query)

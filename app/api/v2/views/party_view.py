@@ -91,3 +91,27 @@ def get_specific_party(party_id):
         "message": "{} retrieved successfully".format(party[0]['name']),
         "product": party
         }), 200)
+@party_route.route('/update/<int:party_id>',methods=['PUT'])
+def update(party_id): 
+    """ candidate can update a party """
+    try:
+        data = request.get_json(force=True)
+    except:
+        return make_response(jsonify({
+            'status':400,
+            'msg':'data should be in json format'
+        }),400)  
+    id=party_id
+    name = data["name"]
+    hqaddress = data["hqaddress"]
+    logoUrl = data["logoUrl"]
+    PARTY.update(id, name, hqaddress, logoUrl)
+
+    return make_response(jsonify({
+            "message": "Party updated successfully",
+            "party": {
+                "name":name,
+                "hqaddress": hqaddress,
+                "logoUrl": logoUrl
+            }
+        }), 201)
