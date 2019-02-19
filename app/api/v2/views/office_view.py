@@ -86,8 +86,6 @@ def update(office_id):
     id=office_id
     name = data["name"]
     office_type = data["office_type"]
-
-
     office.update(id, name, office_type )
 
     return make_response(jsonify({
