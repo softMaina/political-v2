@@ -38,3 +38,11 @@ class User():
         database.insert_to_db(save_user_query)
 
         return users
+    
+    @staticmethod
+    def fetch_user(email):
+        select_user_by_email = """
+        SELECT * FROM users
+        WHERE email = '{}'""".format(email)
+
+        return database.select_from_db(select_user_by_email)
