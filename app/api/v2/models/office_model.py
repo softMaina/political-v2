@@ -30,3 +30,6 @@ class Office():
         query = """UPDATE offices SET name = '{}',office_type = '{}' WHERE office_id = '{}' """.format(office_name,office_type,office_id)
 
         database.insert_to_db(query)
+    def delete(self, office_id):
+        query = """DELETE FROM offices WHERE office_id = '{}' """.format(office_id)
+        database.insert_to_db(query)
