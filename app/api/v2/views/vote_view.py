@@ -2,6 +2,7 @@ from flask import Flask, make_response, abort, jsonify, Blueprint,request
 from app.api.v2.models import vote_model
 from app.api.v2 import database
 from app.api.v2.utils.verify import verify_tokens
+from app.api.v2.utils.validator import validate_ints, return_error
 import datetime
 vote = vote_model.Vote()
 
@@ -21,15 +22,17 @@ def save():
         })),400  
     createdOn = datetime.datetime.utcnow()
     createdBy = data["createdBy"] #voter
-    office = data["office"]
     candidate = data["candidate"] 
 
-    vote.save(createdOn, createdBy, office, candidate)
+    if(validate_ints(candidate) == False):
+        return return_error(400, "candidate data must be of type integer")
+
+    vote.save(createdOn, createdBy, candidate)
 
     return make_response(jsonify({
+            "status":201,
             "message": "Your vote was accepted successfully",
-            "office": {
-                "office":office,
+            "data": {
                 "party": candidate,
                 "user":createdBy
             }

@@ -38,7 +38,7 @@ def validate_credentials(self, data):
     if not valid_email:
         Message = "Please supply a valid email"
         abort(400, Message)
-    elif len(self.password) < 6 or len(self.password) > 12:
+    elif len(self.password) < 6 or len(self.password) > 6:
         Message = "Password must be long than 6 characters or less than 12"
         abort(400, Message)
     elif not any(char.isdigit() for char in self.password):
@@ -53,3 +53,65 @@ def validate_credentials(self, data):
     elif not re.search("^.*(?=.*[@#$%^&+=]).*$", self.password):
         Message = "Password must have a special charater"
         abort(400, Message)
+
+def sanitize_input(input_data):
+    """ check if input is of alphanumeric characters """
+    if input_data.isalpha() == False:
+        return False
+def validate_ints(data):
+    """ensures that data is of integer data type"""
+    if not isinstance(data, int):
+        return False
+    return True
+
+def validate_string(data):
+    """ Ensure data is of a string data type """
+    if not isinstance(data, str):
+        return False
+    return True
+
+def check_field_is_not_empty(input_data):
+
+    if input_data == "":
+        return False
+
+def strip_whitespace(input_data):
+    input_data = input_data.strip()
+    return input_data
+
+def check_is_valid_url(url):
+    """check if the url provided is valid"""
+    if re.match(r"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)",
+               url):
+       return True
+    return False
+
+def validate_party_json_keys(request):
+    request_keys = ["name", "hqaddress", "logoUrl"]
+    errors = []
+    for key in request_keys:
+        if not key in request.json:
+            errors.append(key)
+    return errors
+
+def validate_office_json_keys(request):
+    request_keys = ["name","office_type"]
+
+    errors = []
+    for key in request_keys:
+        if not key in request.json:
+            errors.append(key)
+    return errors
+
+def validate_phone_number(phone_number):
+    if len(phone_number) != 10:
+        return False
+    return True
+
+def return_error(status_code, message):
+    """ function to format response """
+    response = {
+        "status":status_code,
+        "error": message
+    }
+    return make_response(jsonify(response),status_code)
