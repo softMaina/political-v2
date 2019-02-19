@@ -6,13 +6,13 @@ class Config(object):
 
 class Development(Config):
     DEBUG=True
-    DB_URL="dbname='political' host='localhost' port='5432' user='postgres' password='root'"
+    DB_URL="dbname='politicalv2' host='localhost' port='5432' user='postgres' password='root'"
 
 
 class Testing(Config):
     DEBUG=True
     Testing=True
-    DB_URL="dbname='politicaltest' host='localhost' port='5432' user='postgres' password='root'"
+    DB_URL="dbname='politicalv2test' host='localhost' port='5432' user='postgres' password='root'"
 
 
 class Staging(Config):
@@ -28,6 +28,6 @@ config = {
     'testing': Testing,
     'staging':Staging,
     'production': Production,
-    'db_url':"dbname='political' host='localhost' port='5432' user='postgres' password='root'",
-    'test_db_url':"dbname='politicaltest' host='localhost' port='5432' user='postgres' password='root'"
+    'db_url':"dbname='politicalv2' host='localhost' port='5432' user='postgres' password='root'",
+    'test_db_url':"dbname='politicalv2test' host='localhost' port='5432' user='postgres' password='root'"
 }
