@@ -27,3 +27,25 @@ def save():
                 "hqaddress": office_type
             }
         }), 201)
+
+@office_route.route('',methods=['GET'])
+def get_offices():
+
+    offices = office_model.Office()
+
+    all_offices = offices.fetch_all_offices()
+
+    if not all_offices:
+
+        return make_response(jsonify({
+            'status':404,
+            'msg':'there are no registered offices yer'
+        }),404)
+    
+    response = jsonify({
+            'message': "Successfully fetched all the offices",
+            'products': all_offices
+            })
+
+    response.status_code = 200
+    return response
