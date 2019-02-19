@@ -53,7 +53,9 @@ def delete(party_id):
     }), 200)
 @party_route.route('',methods=['GET'])
 def get_parties():
-
+    """
+        return all registered parties
+    """
     parties = party_model.Party()
 
     all_parties = parties.fetch_all_parties()
