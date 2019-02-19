@@ -4,7 +4,6 @@ create tables for the application
 
 import sys
 import os
-
 import psycopg2
 import psycopg2.extras
 from instance.config import config
