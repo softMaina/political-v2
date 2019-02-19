@@ -53,9 +53,12 @@ def get_offices():
 
     response.status_code = 200
     return response
-    
+
 @office_route.route('getoffice/<int:office_id>',methods=['GET'])
 def get_specific_office(office_id):
+    """  
+        get an office by id
+    """
     query = """SELECT * FROM offices WHERE office_id = '{}'""".format(office_id)
 
     office = database.select_from_db(query)
