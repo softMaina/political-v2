@@ -20,8 +20,8 @@ before_script:
   - ./cc-test-reporter before-build
 
 # command to run tests
-# script:
-#   - coverage run --source=app.api.v1 -m pytest app/tests/v1 -v -W error::UserWarning && coverage report
+script:
+  - coverage run --source=app.api.v2 -m pytest app/api/v2/tests -v -W error::UserWarning && coverage report
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
