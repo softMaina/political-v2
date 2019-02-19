@@ -20,4 +20,7 @@ class Party(object):
         database.insert_to_db(query)
 
         return party
+    def delete(self, party_id):
+        query = """DELETE FROM parties WHERE party_id = '{}' """.format(party_id)
+        database.insert_to_db(query)
     
