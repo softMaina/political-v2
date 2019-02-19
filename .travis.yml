@@ -1,32 +1,32 @@
-env:
-  global:
-    - CC_TEST_REPORTER_ID=a9dd7a33137f2d08d70a3d66bfbab2465bcd403f76fd6fac6a02e277226eb805
-    - APP_SETTINGS="development"
-    - SECRET_KEY="iBiU5Pex8TkSQtk4twZgBTaIKFEtkNLMF"
+# env:
+#   global:
+#     - CC_TEST_REPORTER_ID=a9dd7a33137f2d08d70a3d66bfbab2465bcd403f76fd6fac6a02e277226eb805
+#     - APP_SETTINGS="development"
+#     - SECRET_KEY="iBiU5Pex8TkSQtk4twZgBTaIKFEtkNLMF"
 
-language: python
+# language: python
 
-# python version
-python:
-  - "3.6"
+# # python version
+# python:
+#   - "3.6"
 
-# command to install dependencies
-install:
-  - pip install -r requirements.txt
+# # command to install dependencies
+# install:
+#   - pip install -r requirements.txt
 
-before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
+# before_script:
+#   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+#   - chmod +x ./cc-test-reporter
+#   - ./cc-test-reporter before-build
 
-# command to run tests
-script:
-  - coverage run --source=app.api.v1 -m pytest app/tests/v1 -v -W error::UserWarning && coverage report
+# # command to run tests
+# script:
+#   - coverage run --source=app.api.v1 -m pytest app/tests/v1 -v -W error::UserWarning && coverage report
 
-after_script:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+# after_script:
+#   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
-# Post coverage results to coverage.io
-after_success:
-- coveralls
-- codeclimate-test-reporter
+# # Post coverage results to coverage.io
+# after_success:
+# - coveralls
+# - codeclimate-test-reporter

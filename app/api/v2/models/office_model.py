@@ -17,3 +17,11 @@ class Office():
         VALUES('{}', '{}')""".format(office_name, office_type)
         database.insert_to_db(query)
         return office
+    
+    def fetch_all_offices(self):
+        """Fetches all offices from
+
+        the database
+        """
+        query = """SELECT * FROM offices"""
+        return database.select_from_db(query)
