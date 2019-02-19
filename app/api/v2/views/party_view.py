@@ -4,8 +4,6 @@ from app.api.v2 import database
 
 PARTY = party_model.Party()
 
-
-
 party_route = Blueprint('party',__name__,url_prefix='/api/v2/party')
 @party_route.route('/add',methods=['POST'])
 def save():
@@ -35,3 +33,21 @@ def save():
                 "logoUrl": logoUrl
             }
         }), 201)
+@party_route.route('delete/<int:party_id>',methods=['DELETE'])
+def delete(party_id):
+    """
+        Delete a political party
+    """
+    query = """SELECT * FROM parties WHERE party_id = {} """.format(party_id)
+    party = database.select_from_db(query)
+        
+    if not party:
+        return make_response(jsonify({
+        "message": "Party with id {} does not exist".format(party_id)
+        }), 404)
+
+    PARTY.delete(party_id)
+
+    return make_response(jsonify({
+        "message": "Product deleted successfully"
+    }), 200)
