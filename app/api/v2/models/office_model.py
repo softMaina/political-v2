@@ -7,7 +7,7 @@ class Office():
         self.office = OFFICES
     
     def save(self, office_name, office_type):
-
+        """add a new office"""
         office = {
             "name": office_name,
             "office_type": office_type

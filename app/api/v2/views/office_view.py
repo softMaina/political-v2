@@ -7,7 +7,7 @@ office = office_model.Office()
 office_route = Blueprint('office',__name__,url_prefix='/api/v2/office')
 @office_route.route('/add',methods=['POST'])
 def save():
-
+    """ Add a new political office to the database """
     try:
         data = request.get_json(force=True)
     except:
