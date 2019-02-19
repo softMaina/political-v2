@@ -73,9 +73,12 @@ def get_parties():
 
     response.status_code = 200
     return response
-    
+
 @party_route.route('getparty/<int:party_id>',methods=['GET'])
 def get_specific_party(party_id):
+    """
+        Get a specific political party by id
+    """
     query = """SELECT * FROM parties WHERE party_id = '{}'""".format(party_id)
 
     party = database.select_from_db(query)
