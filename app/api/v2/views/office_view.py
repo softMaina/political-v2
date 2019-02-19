@@ -30,6 +30,10 @@ def save():
 
 @office_route.route('',methods=['GET'])
 def get_offices():
+    """
+        get all registered offices
+    """
+
 
     offices = office_model.Office()
 
