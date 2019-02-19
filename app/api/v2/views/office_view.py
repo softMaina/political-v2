@@ -95,3 +95,22 @@ def update(office_id):
                 "hqaddress": office_type
             }
         }), 201)
+
+@office_route.route('delete/<int:office_id>',methods=['DELETE'])
+def delete(office_id):
+    """
+        delete a political office
+    """
+    query = """SELECT * FROM offices WHERE office_id = {} """.format(office_id)
+    office = database.select_from_db(query)
+        
+    if not office:
+        return make_response(jsonify({
+        "message": "Office with id {} does not exist".format(office_id)
+        }), 404)
+
+    office.delete(office_id)
+
+    return make_response(jsonify({
+        "message": "Product deleted successfully"
+    }), 200)
