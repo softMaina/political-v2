@@ -1,7 +1,9 @@
 import os
 
 class Config(object):
-
+    """
+        configure environments variables
+    """
     DEBUG=False
 
 class Development(Config):
