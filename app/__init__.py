@@ -10,7 +10,9 @@ def create_app(config_name):
     
     init_db()
 
+    from app.api.v2.views import office_view
     from app.api.v2.views import user_view
     app.register_blueprint(user_view.auth_route)
+    app.register_blueprint(office_view.office_route)
 
     return app
