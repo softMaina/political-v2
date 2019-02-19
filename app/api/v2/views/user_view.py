@@ -56,6 +56,7 @@ def register():
 
     # validate_credentials(self,data)
     check_duplication("email", "users", email)
+    # hash the user password
     hashed_password = generate_password_hash(request_password, method='sha256')
 
     user.save_user(firstname,lastname,othername,email,phoneNumber,passportUrl,hashed_password, False)
