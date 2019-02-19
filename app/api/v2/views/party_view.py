@@ -93,6 +93,7 @@ def get_specific_party(party_id):
         }), 200)
 @party_route.route('/update/<int:party_id>',methods=['PUT'])
 def update(party_id): 
+    """ candidate can update a party """
     try:
         data = request.get_json(force=True)
     except:
