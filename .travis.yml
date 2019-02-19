@@ -2,7 +2,7 @@ env:
   global:
     - CC_TEST_REPORTER_ID=a9dd7a33137f2d08d70a3d66bfbab2465bcd403f76fd6fac6a02e277226eb805
     - APP_SETTINGS="development"
-    - SECRET_KEY="ra71MJm63P6N6FgwhTnvaPNQZFz7oMBrE"
+    - SECRET_KEY="iBiU5Pex8TkSQtk4twZgBTaIKFEtkNLMF"
 
 language: python
 
