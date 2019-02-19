@@ -71,3 +71,29 @@ def get_specific_office(office_id):
         "message": "{} retrieved successfully".format(office[0]['name']),
         "product": office
         }), 200)
+@office_route.route('/update/<int:office_id>',methods=['PUT'])
+def update(office_id): 
+    """
+        edit a political office
+    """
+    try:
+        data = request.get_json(force=True)
+    except:
+        return make_response(jsonify({
+            'status':400,
+            'msg':'data should be in json format'
+        }),400)  
+    id=office_id
+    name = data["name"]
+    office_type = data["office_type"]
+
+
+    office.update(id, name, office_type )
+
+    return make_response(jsonify({
+            "message": "office updated successfully",
+            "office": {
+                "name":name,
+                "hqaddress": office_type
+            }
+        }), 201)

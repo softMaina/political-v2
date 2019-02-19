@@ -25,3 +25,8 @@ class Office():
         """
         query = """SELECT * FROM offices"""
         return database.select_from_db(query)
+    def update(self, office_id, office_name, office_type):
+
+        query = """UPDATE offices SET name = '{}',office_type = '{}' WHERE office_id = '{}' """.format(office_name,office_type,office_id)
+
+        database.insert_to_db(query)
