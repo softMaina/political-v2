@@ -35,6 +35,9 @@ def save():
         }), 201)
 @party_route.route('delete/<int:party_id>',methods=['DELETE'])
 def delete(party_id):
+    """
+        Delete a political party
+    """
     query = """SELECT * FROM parties WHERE party_id = {} """.format(party_id)
     party = database.select_from_db(query)
         
