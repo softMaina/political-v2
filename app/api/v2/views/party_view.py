@@ -9,7 +9,9 @@ PARTY = party_model.Party()
 party_route = Blueprint('party',__name__,url_prefix='/api/v2/party')
 @party_route.route('/add',methods=['POST'])
 def save():
-
+    """
+        get a political party and save it to the database
+    """
     try:
         data = request.get_json(force=True)
     except:

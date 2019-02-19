@@ -8,6 +8,7 @@ class Party(object):
         self.party = PARTIES
     
     def save(self, party_name, party_hqaddress, party_logoUrl):
+        """ save a political party """
         party = {
             "name": party_name,
             "hqaddress":party_hqaddress,
