@@ -98,6 +98,9 @@ def update(office_id):
 
 @office_route.route('delete/<int:office_id>',methods=['DELETE'])
 def delete(office_id):
+    """
+        delete a political office
+    """
     query = """SELECT * FROM offices WHERE office_id = {} """.format(office_id)
     office = database.select_from_db(query)
         
