@@ -58,7 +58,7 @@ def update(candidate_id):
         }), 201)
 
 @candidate_route.route('',methods=['GET'])
-def get_offices():
+def get_candidates():
 
     candidates = candidate_model.Candidate()
 
