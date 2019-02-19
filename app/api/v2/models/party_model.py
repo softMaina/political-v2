@@ -23,4 +23,11 @@ class Party(object):
     def delete(self, party_id):
         query = """DELETE FROM parties WHERE party_id = '{}' """.format(party_id)
         database.insert_to_db(query)
+    def fetch_all_parties(self):
+        """Fetches all parties from
+
+        the database
+        """
+        query = """SELECT * FROM parties"""
+        return database.select_from_db(query)
     

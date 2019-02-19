@@ -51,3 +51,25 @@ def delete(party_id):
     return make_response(jsonify({
         "message": "Product deleted successfully"
     }), 200)
+@party_route.route('',methods=['GET'])
+def get_parties():
+    """
+        return all registered parties
+    """
+    parties = party_model.Party()
+
+    all_parties = parties.fetch_all_parties()
+
+    if not all_parties:
+        return make_response(jsonify({
+            'status':404,
+            'msg':'there are no registered parties yer'
+        }),404)
+    
+    response = jsonify({
+            'message': "Successfully fetched all the products",
+            'products': all_parties
+            })
+
+    response.status_code = 200
+    return response
