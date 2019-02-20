@@ -1,12 +1,15 @@
 from flask import Flask, make_response, abort, jsonify, Blueprint,request
 from app.api.v2.models import candidate_model
 from app.api.v2 import database
+from app.api.v2.utils.verify import verify_tokens
 
 CANDIDATE = candidate_model.Candidate()
 
-candidate_route = Blueprint('candidate',__name__,url_prefix='/api/v2/candidate')
-@candidate_route.route('/add',methods=['POST'])
+candidate_route = Blueprint('candidate',__name__,url_prefix='/api/v2/')
+@candidate_route.route('candidates',methods=['POST'])
 def save():
+
+    user_email, user_id = verify_tokens()
 
     try:
         data = request.get_json(force=True)
@@ -16,8 +19,8 @@ def save():
             "message":"ensure your content type is application/json"
         })),400  
     office = data["office"]
-    party = data["party"]
-    user = data['user']
+    party = data["party"] 
+    user = user_id
 
     CANDIDATE.save(office, party, user)
 

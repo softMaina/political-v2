@@ -6,9 +6,9 @@ class Vote():
     def __init__(self):
         self.vote = VOTES
     
-    def save(self, createdOn, createdBy, candidate):
-        query =  """INSERT INTO votes(createdOn, createdBy, office, candidate)
-        VALUES('{}','{}','{}')""".format(createdOn,createdBy,candidate)
+    def save(self, createdOn, createdBy, office, candidate):
+        query =  """INSERT INTO votes(createdOn, createdBy,office, candidate)
+        VALUES('{}','{}','{}','{}')""".format(createdOn, createdBy, office, candidate)
         database.insert_to_db(query)
     
     def update(self, vote_id, createdOn, createdBy, candidate):
