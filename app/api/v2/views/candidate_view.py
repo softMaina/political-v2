@@ -10,8 +10,9 @@ CANDIDATE = candidate_model.Candidate()
 candidate_route = Blueprint('candidate',__name__,url_prefix='/api/v2/')
 @candidate_route.route('candidates',methods=['POST'])
 def save():
-    #check that party exists
-    #check that office exists
+   """"
+    add a candidate
+   """
 
     
 
