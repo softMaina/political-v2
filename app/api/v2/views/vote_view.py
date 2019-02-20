@@ -1,10 +1,14 @@
 from flask import Flask, make_response, abort, jsonify, Blueprint,request
 from app.api.v2.models import vote_model
 from app.api.v2 import database
+import json
+from app.api.v2.utils.validator import return_error 
 from app.api.v2.utils.verify import verify_tokens
 from app.api.v2.utils.validator import validate_ints, return_error
 import datetime
+
 vote = vote_model.Vote()
+# vote = json.loads(vote)
 
 vote_route = Blueprint('vote',__name__,url_prefix='/api/v2/')
 @vote_route.route('/votes',methods=['POST'])
@@ -26,24 +30,36 @@ def save():
     if(validate_ints(candidate) == False):
         return return_error(400, "candidate data must be of type integer")
 
-    candidate_office = """SELECT office FROM candidates WHERE candidate = '{}'""".format(candidate)
+    candidate_office = """SELECT office FROM candidates WHERE candidate_id = '{}'""".format(candidate)
 
     office = database.select_from_db(candidate_office)
-    office_id = office[0]['office']
 
     if not office:
-        return return_error(404,"Candidate not found")
+        return return_error(400,"Wrong candidate data")
 
+    office_id = office[0]['office']
+
+
+    # user cannot vote for same office twice 
+    # check that the database does not have more that one column with same office and candidate by the same user
+    vote_once_query = """SELECT createdby, office, candidate FROM votes WHERE createdBy = '{}' AND office = '{}' AND candidate = '{}' """.format(createdBy,office_id,candidate)
+    
+    vote_results = database.select_from_db(vote_once_query)
+
+    vote_results_len = len(vote_results)
+
+    if vote_results_len > 1:
+        return return_error(400,"You cannot vote more than once for the same office")
   
-    vote.save(createdOn, createdBy,office_id, candidate)
+    vote.save(createdOn, createdBy, office_id, candidate)
 
     return make_response(jsonify({
             "status":201,
             "data": {
-                "time":createdOn,
-                "office": office_id,
+                "time voted":createdOn,
+                "to office": office_id,
                 "party": candidate,
-                "user":createdBy
+                "voting user":createdBy
             }
         }), 201)
 

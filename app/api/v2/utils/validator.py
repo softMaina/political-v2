@@ -105,6 +105,8 @@ def validate_office_json_keys(request):
 
 def validate_phone_number(phone_number):
     if len(phone_number) != 10:
+        return False 
+    if not phone_number.isdigit():
         return False
     return True
 
@@ -115,3 +117,13 @@ def return_error(status_code, message):
         "error": message
     }
     return make_response(jsonify(response),status_code)
+def validate_alphabets(user_input):
+    if not user_input.isalpha():
+        return False
+    return True
+
+def validate_office_types(office_type):
+    office_types = ["local","federal","state", "legistlative"]
+    if office_type not in office_types:
+        return False
+    return True

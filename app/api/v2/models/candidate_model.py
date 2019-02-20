@@ -29,3 +29,28 @@ class Candidate():
     def delete(self, candidate_id):
         query = """DELETE FROM candidates WHERE candidate_id = '{}' """.format(candidate_id)
         database.insert_to_db(query)
+
+      
+    @staticmethod
+    def check_candidature(candidate):
+        #candidate should not be registered to more than one office and with more than one party
+        query = """SELECT * FROM candidates WHERE candidate = '{}'""".format(candidate)
+
+        number_of_rows = database.select_from_db(query)
+        
+        return number_of_rows
+    @staticmethod
+    def check_office(office):
+        query = """SELECT * FROM offices WHERE office_id = '{}' """.format(office)
+
+        number_of_rows = database.select_from_db(query)
+
+        return number_of_rows
+    
+    @staticmethod
+    def check_party(office):
+        query = """ SELECT * FROM parties WHERE party_id = '{}' """.format(office)
+
+        number_of_rows = database.select_from_db(query)
+
+        return number_of_rows

@@ -7,7 +7,7 @@ class Vote():
         self.vote = VOTES
     
     def save(self, createdOn, createdBy, office, candidate):
-        query =  """INSERT INTO votes(createdOn, createdBy,office, candidate)
+        query =  """INSERT INTO votes(createdOn, createdBy, office, candidate)
         VALUES('{}','{}','{}','{}')""".format(createdOn, createdBy, office, candidate)
         database.insert_to_db(query)
     
