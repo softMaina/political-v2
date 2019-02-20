@@ -14,8 +14,6 @@ def save():
      add a candidate
     """
 
-    
-
     user_email, user_id = verify_tokens()
 
     try:
