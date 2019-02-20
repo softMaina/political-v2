@@ -1,7 +1,7 @@
 """
 create tables for the application
 """
-
+import json
 import sys
 import os
 import psycopg2

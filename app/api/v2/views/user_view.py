@@ -11,8 +11,9 @@ from flask_jwt_extended import (
 )
 from instance import config
 from app.api.v2.utils.validator import format_response, check_duplication,validate_credentials, validate_phone_number
-from app.api.v2.utils.validator import return_error, validate_string
+from app.api.v2.utils.validator import return_error, validate_string, validate_alphabets, check_is_valid_url
 from app.api.v2.models import user_model
+from validate_email import validate_email
 
 
 auth_route = Blueprint('auth',__name__,url_prefix='/api/v2/auth')
@@ -21,6 +22,10 @@ user = user_model.User()
 
 @auth_route.route('/signup',methods=['POST'])
 def register():
+
+    """
+    method to register user and add them into the database
+    """
 
     data = request.get_json()
 
@@ -40,11 +45,13 @@ def register():
     except KeyError:
         return make_response(jsonify({
                     "error": "Please supply a password to be able to register an attendant"
-                    }), 400)  
+                    }), 400)
+
     if not isinstance(data["email"], str):
         return make_response(jsonify({
                     "error": "Email should be a string"
-                    }), 400)   
+                    }), 400)
+
     if not isinstance(data["password"], str):
         return make_response(jsonify({
                     "error": "Password should be a string"
@@ -55,8 +62,9 @@ def register():
     phoneNumber = data["phoneNumber"]
     passportUrl = data["passportUrl"]
 
+
     if(validate_phone_number(phoneNumber) == False):
-        return return_error(400, "Phone number must be atleast 10 digits register")
+        return return_error(400, "Phone number must be atleast 10 digits register and contain only digits")
 
     if(validate_string(firstname) == False):
         return return_error(400,"Firstname must be a string")
@@ -71,6 +79,15 @@ def register():
         return return_error(400,"Lastname cannot be empty")
     if(othername == ""):
         return return_error(400,"Othername cannot be empty")
+    if(passportUrl == ""):
+        return return_error(400,"passportUrl cannot be empty")
+
+    if(validate_alphabets(firstname) == False):
+        return return_error(400,"firstname can only contain letters") 
+    if(validate_alphabets(lastname) == False):
+        return return_error(400,"lastname can only contain letters") 
+    if(validate_alphabets(othername) == False):
+        return return_error(400,"othername can only contain letters")
 
     # validate_credentials(self,data)
     check_duplication("email", "users", email)
