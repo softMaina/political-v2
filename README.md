@@ -10,20 +10,21 @@ This is an application to help electral commisions to register voters and candid
 
 | Http method  | EndPoint | Functionality |
 | ------------- | ------------- |---------|
-| Post | api/v2/auth/register| user can signup into the application|
+| Post | api/v2/auth/signup | user can signup into the application|
 | Post | api/v2/auth/login | user can signin into the application |
-| Get  | api/v2/office  | used by user and admin to get all offices |
-| Post  | api/v2/office/add  | used by admin to add office |
-| Get | api/v2/office/getoffice/:id| used by admin to get a specific office |
-| Delete | api/v2/office/delete/:id | used by admin to delete a specific office|
-| Put | api/v2/office/update/:id | used by admin to update office|
-| Get | api/v2/party | used by admin and user to get all parties |
-| Get | api/v2/party/getparty/:id | used by user and admin to get a specific party |
-| Post | api/v2/party/add | used by admin to add new party |
-| Put | api/v2/party/update/:id | used by admin to patch a party |
-| Delete | api/v2/party/delete/:id | used by admin to delete a party |
-| Post | api/v2/candidate/add | used by candidate to register his political aspiration |
-| Post | api/v2/vote/add | used by user to vote|
+| Get  | api/v2/offices  | used by user and admin to get all offices |
+| Post  | api/v2/offices  | used by admin to add office |
+| Get | api/v2/offices/:id| used by admin to get a specific office |
+| Delete | api/v2/offices/:id | used by admin to delete a specific office|
+| Put | api/v2/offices/:id | used by admin to update office|
+| Get | api/v2/parties | used by admin and user to get all parties |
+| Get | api/v2/parties/:id | used by user and admin to get a specific party |
+| Post | api/v2/parties | used by admin to add new party |
+| Put | api/v2/parties/:id | used by admin to patch a party |
+| Delete | api/v2/parties/:id | used by admin to delete a party |
+| Post | api/v2/candidates | used by candidate to register his political aspiration |
+| Post | api/v2/votes | used by user to vote|
+| Get | api/v2/vote | get vote results |
 
 ## Installing The Application
 - 1. open terminal in your preferred folder
@@ -33,8 +34,7 @@ This is an application to help electral commisions to register voters and candid
 - 5. activate your virtual environment `source venv/bin/activate`
 - 5. Install dependencies from the requirements.txt file `pip3 install -r requirements.txt`
 - 6. Configure environment `export FLASK_ENV="development"`
-- 7. Export environment variables to your environment `export FLASK_APP="run.py"`
-- 8. Run the application using flask command `flask run`
+- 7. Run application as `python3 run.py`
 
 ## Running tests
 Set the testing environment in your terminal `export FLASK_ENV="testing"`
@@ -73,7 +73,7 @@ For this endpoint, minimum data requirements are as follows
 For this endpoint, minimum data requirements are as follows
 ```
  {
-	   "firstname" : String,
+    "firstname" : String,
     "lastname" : String,
     "othername": String,
     "email": String,
@@ -91,12 +91,23 @@ For this endpoint, minimum data requirements are as follows
 	"password": String
  }
 ```
+## voting endpoints
+For this endpoint, minimum data requirements are as follows
+
+```
+{
+	"candidate":integer
+}
+```
+
 
 ## Technologies used
 - 1. Pytests for running tests
 - 2. Flask python framework
 - 3. PyJWT
 
+##Deploy
+https://heroku-politicalv2.herokuapp.com
 
 ## Author
 Allan Maina
