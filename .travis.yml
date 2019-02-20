@@ -18,5 +18,5 @@ script:
 
 # Post coverage results to coverage.io
 after_success:
-- coveralls
-- codeclimate-test-reporter
+  - coveralls
+  - codeclimate-test-reporter
