@@ -6,7 +6,10 @@ from app.api.v2.tests import base_tests
 
 class TestParties(base_tests.TestBaseClass):
     # class contains tests for party endpoints
-
+    
+    """
+     Class to test party endpoints
+    """
     
     def test_get_parties(self):
       
