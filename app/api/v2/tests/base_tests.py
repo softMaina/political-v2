@@ -28,7 +28,7 @@ class TestBaseClass(unittest.TestCase):
         }
         self.OFFICE = {
             'name':'ward',
-            'office_type':'mca'
+            'office_type':'state'
         }
         self.wrong_office_name = {
             'id':1,
