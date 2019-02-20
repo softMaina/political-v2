@@ -1,12 +1,15 @@
 from flask import Flask, make_response, abort, jsonify, Blueprint,request
 from app.api.v2.models import candidate_model
 from app.api.v2 import database
+from app.api.v2.utils.verify import verify_tokens
 
 CANDIDATE = candidate_model.Candidate()
 
-candidate_route = Blueprint('candidate',__name__,url_prefix='/api/v2/candidate')
-@candidate_route.route('/add',methods=['POST'])
+candidate_route = Blueprint('candidate',__name__,url_prefix='/api/v2/')
+@candidate_route.route('candidates',methods=['POST'])
 def save():
+
+    user_email, user_id = verify_tokens()
 
     try:
         data = request.get_json(force=True)
@@ -16,8 +19,8 @@ def save():
             "message":"ensure your content type is application/json"
         })),400  
     office = data["office"]
-    party = data["party"]
-    user = data['user']
+    party = data["party"] 
+    user = user_id
 
     CANDIDATE.save(office, party, user)
 
@@ -31,7 +34,7 @@ def save():
         }), 201)
 
 
-@candidate_route.route('/update/<int:candidate_id>',methods=['PUT'])
+@candidate_route.route('candidates/<int:candidate_id>',methods=['PUT'])
 def update(candidate_id): 
     try:
         data = request.get_json(force=True)
@@ -57,7 +60,7 @@ def update(candidate_id):
             }
         }), 201)
 
-@candidate_route.route('',methods=['GET'])
+@candidate_route.route('candidates',methods=['GET'])
 def get_candidates():
 
     candidates = candidate_model.Candidate()
@@ -78,7 +81,7 @@ def get_candidates():
     response.status_code = 200
     return response
 
-@candidate_route.route('delete/<int:candidate_id>',methods=['DELETE'])
+@candidate_route.route('candidates/<int:candidate_id>',methods=['DELETE'])
 def delete(candidate_id):
     query = """SELECT * FROM candidates WHERE candidate_id = {} """.format(candidate_id)
     office = database.select_from_db(query)
@@ -95,7 +98,7 @@ def delete(candidate_id):
         "message": "Product deleted successfully"
     }), 200)
 
-@candidate_route.route('getcandidate/<int:candidate_id>',methods=['GET'])
+@candidate_route.route('candidates/<int:candidate_id>',methods=['GET'])
 def get_specific_candidate(candidate_id):
     query = """SELECT * FROM candidates WHERE candidate_id = '{}'""".format(candidate_id)
 

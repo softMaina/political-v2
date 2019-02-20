@@ -19,7 +19,7 @@ auth_route = Blueprint('auth',__name__,url_prefix='/api/v2/auth')
 
 user = user_model.User()
 
-@auth_route.route('/register',methods=['POST'])
+@auth_route.route('/signup',methods=['POST'])
 def register():
 
     data = request.get_json()
@@ -127,11 +127,11 @@ def login():
     request_email = request_mail.strip()                   
     user = user_model.User.fetch_user(request_email)
     
-    if user:
+    if user and request_email == user[0]['email'] and check_password_hash(user[0]['password'], request_password):
         token = jwt.encode({
             "email": request_email,
             "user_id": user[0]['user_id'],
-            "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=3000)
+            "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
         }, os.getenv('JWT_SECRET_KEY', default='SdaHv342nx!jknr837bjwd?c,lsajjjhw673hdsbgeh'))
         return make_response(jsonify({
                         "status": 200,

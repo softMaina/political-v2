@@ -5,8 +5,8 @@ from app.api.v2.utils.validator import validate_party_json_keys, return_error, v
 
 PARTY = party_model.Party()
 
-party_route = Blueprint('party',__name__,url_prefix='/api/v2/party')
-@party_route.route('/add',methods=['POST'])
+party_route = Blueprint('party',__name__,url_prefix='/api/v2')
+@party_route.route('/parties',methods=['POST'])
 def save():
     """
         get a political party and save it to the database
@@ -63,7 +63,7 @@ def save():
             }
         }), 201)
 
-@party_route.route('delete/<int:party_id>',methods=['DELETE'])
+@party_route.route('parties/<int:party_id>',methods=['DELETE'])
 def delete(party_id):
     """
         Delete a political party
@@ -82,7 +82,7 @@ def delete(party_id):
         "status":200,
         "message": "Party deleted successfully"
     }), 200)
-@party_route.route('',methods=['GET'])
+@party_route.route('parties',methods=['GET'])
 def get_parties():
     """
         return all registered parties
@@ -105,7 +105,7 @@ def get_parties():
     response.status_code = 200
     return response
 
-@party_route.route('getparty/<int:party_id>',methods=['GET'])
+@party_route.route('parties/<int:party_id>',methods=['GET'])
 def get_specific_party(party_id):
     """
         Get a specific political party by id
@@ -123,7 +123,7 @@ def get_specific_party(party_id):
         "status": 200,
         "data": party
         }), 200)
-@party_route.route('/update/<int:party_id>',methods=['PUT'])
+@party_route.route('parties/<int:party_id>',methods=['PUT'])
 def update(party_id): 
     """ candidate can update a party """
 

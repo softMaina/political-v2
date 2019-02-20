@@ -6,12 +6,11 @@ from app.api.v2.utils.validator import validate_ints, return_error
 import datetime
 vote = vote_model.Vote()
 
-vote_route = Blueprint('vote',__name__,url_prefix='/api/v2/vote')
-@vote_route.route('/add',methods=['POST'])
+vote_route = Blueprint('vote',__name__,url_prefix='/api/v2/')
+@vote_route.route('/votes',methods=['POST'])
 def save():
     """ save user vote """
-    # user_email, user_id = verify_tokens()
-
+    user_email, user_id = verify_tokens()
    
     try:
         data = request.get_json(force=True)
@@ -21,18 +20,28 @@ def save():
             "message":"ensure your content type is application/json"
         })),400  
     createdOn = datetime.datetime.utcnow()
-    createdBy = data["createdBy"] #voter
+    createdBy = user_id
     candidate = data["candidate"] 
 
     if(validate_ints(candidate) == False):
         return return_error(400, "candidate data must be of type integer")
 
-    vote.save(createdOn, createdBy, candidate)
+    candidate_office = """SELECT office FROM candidates WHERE candidate = '{}'""".format(candidate)
+
+    office = database.select_from_db(candidate_office)
+    office_id = office[0]['office']
+
+    if not office:
+        return return_error(404,"Candidate not found")
+
+  
+    vote.save(createdOn, createdBy,office_id, candidate)
 
     return make_response(jsonify({
             "status":201,
-            "message": "Your vote was accepted successfully",
             "data": {
+                "time":createdOn,
+                "office": office_id,
                 "party": candidate,
                 "user":createdBy
             }
