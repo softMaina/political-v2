@@ -46,3 +46,15 @@ class User():
         WHERE email = '{}'""".format(email)
 
         return database.select_from_db(select_user_by_email)
+    
+    @staticmethod
+    def check_candidature(candidate):
+        #candidate should not be registered to more than one office and with more than one party
+        query = """SELECT * FROM candidates WHERE candidate = '{}'""".format(candidate)
+
+        number_of_rows = database.select_from_db(query)
+
+        if number_of_rows > 1:
+            return False
+        
+        return True

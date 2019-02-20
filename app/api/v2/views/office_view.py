@@ -1,7 +1,7 @@
 from flask import Flask, make_response, abort, jsonify, Blueprint,request
 from app.api.v2.models import office_model
 from app.api.v2 import database
-from app.api.v2.utils.validator import validate_office_json_keys, return_error, validate_string
+from app.api.v2.utils.validator import validate_office_json_keys, return_error, validate_string,validate_office_types
 office = office_model.Office()
 
 
@@ -30,6 +30,9 @@ def save():
     office_type = office_type.strip()
 
 
+    if(validate_office_types(office_type.lower()) == False):
+        return return_error(400,"Office must be of either of the following State, Legistlative, Local, Federal")
+
     if(validate_string(name) == False):
         return return_error(400, "Name must be of type string")
     
@@ -48,7 +51,7 @@ def save():
             "status": 201,
             "office": {
                 "name":name,
-                "hqaddress": office_type
+                "office_type": office_type
             }
         }), 201)
 
