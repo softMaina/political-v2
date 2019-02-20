@@ -6,7 +6,7 @@ office = office_model.Office()
 
 
 office_route = Blueprint('office',__name__,url_prefix='/api/v2/')
-@office_route.route('OFFICES',methods=['POST'])
+@office_route.route('offices',methods=['POST'])
 def save():
     """ Add a new political office to the database """
 
@@ -52,7 +52,7 @@ def save():
             }
         }), 201)
 
-@office_route.route('OFFICES',methods=['GET'])
+@office_route.route('offices',methods=['GET'])
 def get_offices():
     """
         get all registered offices
@@ -78,7 +78,7 @@ def get_offices():
     response.status_code = 200
     return response
 
-@office_route.route('OFFICES/<int:office_id>',methods=['GET'])
+@office_route.route('offices/<int:office_id>',methods=['GET'])
 def get_specific_office(office_id):
     """  
         get an office by id
@@ -97,7 +97,7 @@ def get_specific_office(office_id):
         "status":200,
         "office": office
         }), 200)
-@office_route.route('OFFICES/<int:office_id>',methods=['PUT'])
+@office_route.route('offices/<int:office_id>',methods=['PUT'])
 def update(office_id): 
     """
         edit a political office
@@ -142,7 +142,7 @@ def update(office_id):
             }
         }), 201)
 
-@office_route.route('OFFICES/<int:office_id>',methods=['DELETE'])
+@office_route.route('offices/<int:office_id>',methods=['DELETE'])
 def delete(office_id):
     """
         delete a political office

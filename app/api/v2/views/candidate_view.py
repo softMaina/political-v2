@@ -34,7 +34,7 @@ def save():
         }), 201)
 
 
-@candidate_route.route('/update/<int:candidate_id>',methods=['PUT'])
+@candidate_route.route('candidates/<int:candidate_id>',methods=['PUT'])
 def update(candidate_id): 
     try:
         data = request.get_json(force=True)
@@ -60,7 +60,7 @@ def update(candidate_id):
             }
         }), 201)
 
-@candidate_route.route('',methods=['GET'])
+@candidate_route.route('candidates',methods=['GET'])
 def get_candidates():
 
     candidates = candidate_model.Candidate()
@@ -81,7 +81,7 @@ def get_candidates():
     response.status_code = 200
     return response
 
-@candidate_route.route('delete/<int:candidate_id>',methods=['DELETE'])
+@candidate_route.route('candidates/<int:candidate_id>',methods=['DELETE'])
 def delete(candidate_id):
     query = """SELECT * FROM candidates WHERE candidate_id = {} """.format(candidate_id)
     office = database.select_from_db(query)
@@ -98,7 +98,7 @@ def delete(candidate_id):
         "message": "Product deleted successfully"
     }), 200)
 
-@candidate_route.route('getcandidate/<int:candidate_id>',methods=['GET'])
+@candidate_route.route('candidates/<int:candidate_id>',methods=['GET'])
 def get_specific_candidate(candidate_id):
     query = """SELECT * FROM candidates WHERE candidate_id = '{}'""".format(candidate_id)
 
