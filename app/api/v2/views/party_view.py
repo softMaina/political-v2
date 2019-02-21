@@ -1,17 +1,29 @@
+"""
+    Party endpoints
+"""
 from flask import Flask, make_response, abort, jsonify, Blueprint,request
 from app.api.v2.models import party_model
+from app.api.v2.models import user_model
 from app.api.v2 import database
-from app.api.v2.utils.validator import validate_party_json_keys, return_error, validate_string, strip_whitespace
+from app.api.v2.utils.verify import verify_tokens
+from app.api.v2.utils.validator import validate_party_json_keys, return_error, validate_string, strip_whitespace, check_duplication, validate_ints
 
 PARTY = party_model.Party()
-
+USER = user_model.User()
 party_route = Blueprint('party',__name__,url_prefix='/api/v2')
+
 @party_route.route('/parties',methods=['POST'])
 def save():
     """
-        get a political party and save it to the database
+    Save a party into the database
+    method: POST
     """
+    # check if is admin
+    user_email, user_id = verify_tokens()
 
+    if(USER.check_if_admin(user_id) == False):
+        return return_error(401,"Must be an admin to add party")
+    #validate json keys
     json_key_errors = validate_party_json_keys(request)
 
     if json_key_errors:
@@ -23,14 +35,11 @@ def save():
         return make_response(jsonify({
             "status":400,
             "error":"Ensure your content type is application/json"
-        })),400  
+        })),400
+      
     name = data["name"]
     hqaddress = data["hqaddress"]
     logoUrl = data["logoUrl"]
-
-    name = name.replace("","")
-    hqaddress = hqaddress.strip()
-    logoUrl = logoUrl.strip()
 
     if(validate_string(name) == False):
         return return_error(400, "Name must be of type string")
@@ -40,16 +49,38 @@ def save():
 
     if(validate_string(logoUrl) == False):
         return return_error(400, "LogoUrl must be of type string")
+
+
     if(name == ""):
         return return_error(400,"Name cannot be empty")
+
     if(hqaddress == ""):
         return return_error(400,"Hqaddress cannot be empty")
+
     if(logoUrl == ""):
         return return_error(400,"LogoUrl cannot be empty")
+
+    name = name.replace("","")
+    hqaddress = hqaddress.strip()
+    logoUrl = logoUrl.strip()
+
+    if(name == ""):
+        return return_error(400,"Name cannot be empty")
+
+    if(hqaddress == ""):
+        return return_error(400,"Hqaddress cannot be empty")
+
+    if(logoUrl == ""):
+        return return_error(400,"LogoUrl cannot be empty")
+
+  
 
     name = strip_whitespace(name)
     hqaddress = strip_whitespace(hqaddress)
     logoUrl = strip_whitespace(logoUrl)
+
+    #check if party with same name exists, if true, abort
+    check_duplication("name","parties", name)
 
 
     PARTY.save(name, hqaddress,logoUrl)
@@ -63,11 +94,22 @@ def save():
             }
         }), 201)
 
+
 @party_route.route('parties/<int:party_id>',methods=['DELETE'])
 def delete(party_id):
     """
-        Delete a political party
+    Delete a political party
+    :params: party id
     """
+
+     # check if is admin
+    user_email, user_id = verify_tokens()
+
+    if(USER.check_if_admin(user_id) == False):
+        return return_error(401,"Must be an admin to delete party")
+    if(validate_ints(party_id) == False):
+        return return_error(400, "Wrong parameters party id {}").format(party_id)
+
     query = """SELECT * FROM parties WHERE party_id = {} """.format(party_id)
     party = database.select_from_db(query)
         
@@ -82,6 +124,7 @@ def delete(party_id):
         "status":200,
         "message": "Party deleted successfully"
     }), 200)
+
 @party_route.route('parties',methods=['GET'])
 def get_parties():
     """
@@ -127,6 +170,13 @@ def get_specific_party(party_id):
 def update(party_id): 
     """ candidate can update a party """
 
+     # check if is admin
+    user_email, user_id = verify_tokens()
+
+    if(USER.check_if_admin(user_id) == False):
+        return return_error(401,"Must be an admin to update party")
+    #validate json keys
+
     json_key_errors = validate_party_json_keys(request)
 
     if json_key_errors:
@@ -161,13 +211,22 @@ def update(party_id):
     if(logoUrl == ""):
         return return_error(400,"LogoUrl cannot be empty")
 
+    name = strip_whitespace(name)
+    hqaddress = strip_whitespace(hqaddress)
+    logoUrl = strip_whitespace(logoUrl)
+
+    #check if party with same name exists, if true, abort
+    check_duplication("name","parties", name)
+    check_duplication("logoUrl","parties", logoUrl)
+    check_duplication("hqaddress","parties", hqaddress)
+
     PARTY.update(id, name, hqaddress, logoUrl)
 
     return make_response(jsonify({
-            "status": 201,
+            "status": 200,
              "data": {
                 "name":name,
                 "hqaddress": hqaddress,
                 "logoUrl": logoUrl
             }
-        }), 201)
+        }), 200)

@@ -7,12 +7,17 @@ from app.api.v2.database import init_db
 from instance.config import config
 
 class TestBaseClass(unittest.TestCase):
-    """ Base test class """
+    """ 
+    A class to setup test environment for api endpoints
+    :param: unittest.TestCase object
+    """
 
     
     def setUp(self):
+        """
+        A method to instantiate the TestBaseClass calss
+        """
         self.app = create_app(os.getenv('FLASK_ENV'))
-        self.BASE_URL = 'api/v2'
         self.app_context = self.app.app_context()
         self.app_context.push()
         self.app_test_client = self.app.test_client()
@@ -23,8 +28,8 @@ class TestBaseClass(unittest.TestCase):
             init_db(self.db_url)
 
         self.Candidate = {
-            "office":7,
-	        "party":5
+            "office":1,
+	        "party":1
         }
 
         self.User = {
@@ -36,6 +41,21 @@ class TestBaseClass(unittest.TestCase):
             "password":"password",
             "passportUrl":"www.img.com/passport"
         }
+        self.Admin = {
+            "firstname":"dffewf",
+            "lastname" :"Fdfdsa",
+            "othername":"asfdfdsa",
+            "email":"admin@gmail.com",
+            "phoneNumber":"4444478043",
+            "password":"password",
+            "passportUrl":"www.img.com/passport",
+            "isAdmin":"true"
+        }
+        self.admin_login = {
+            "email":"admin@gmail.com",
+            "password":"password"
+        }
+        
         self.User_wrong_name = {
             "firstname":"dff2wf",
             "lastname" :"Fdfdsa",
@@ -60,9 +80,23 @@ class TestBaseClass(unittest.TestCase):
             'hqaddress':'Tuko Pamoja',
             'logoUrl':'www.youtube.com'
         }
+        self.update_party = {
+            'id':1,
+            'name':'new party',
+            'hqaddress':'tuko',
+            'logoUrl':'some url'
+        }
         self.OFFICE = {
             'name':'ward',
             'office_type':'state'
+        }
+        self.update_office = {
+            'name':'new',
+            'office_type':'federal'
+        }
+        self.Wrong_office_type = {
+            'name':'ward',
+            'office_type':'office_type'
         }
         self.wrong_office_name = {
             'id':1,
@@ -90,9 +124,6 @@ class TestBaseClass(unittest.TestCase):
 
     def tearDown(self):
         self.app_context.pop()
-
-    
-    
 
 if __name__ == '__main__':
     unittest.main()

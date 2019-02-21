@@ -5,6 +5,9 @@ from functools import wraps
 from flask import request, make_response, jsonify,abort
 
 def verify_tokens():
+    """
+    Method to verify that auth token is valid
+    """
     token = None
     if 'Authorization' in request.headers:
         token = request.headers['Authorization']

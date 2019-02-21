@@ -22,5 +22,9 @@ class Vote():
 
         the database
         """
-        query = """SELECT * FROM votes"""
+        query = """ SELECT * FROM votes """
+        # query = """SELECT offices.name AS office, users.firstname AS firstname, users.lastname AS lastname,
+        #         COUNT (votes.candidate) AS votes FROM votes JOIN offices ON offices.office_id = votes.office
+        #         JOIN  users ON users.user_id = votes.candidate GROUP BY users.firstname, users.lastname, offices.name
+        #       """
         return database.select_from_db(query)

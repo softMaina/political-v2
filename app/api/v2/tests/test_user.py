@@ -31,4 +31,4 @@ class TestUsers(base_tests.TestBaseClass):
         response1 = self.app_test_client.post('/api/v2/auth/signup',json=self.User)
         response = self.app_test_client.post('/api/v2/auth/login',json=self.user_login_wrong)
 
-        self.assertEqual(response.status_code,403)
+        self.assertEqual(response.status_code,401)

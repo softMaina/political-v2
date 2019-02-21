@@ -1,14 +1,24 @@
 from flask import Flask, make_response, abort, jsonify, Blueprint,request
 from app.api.v2.models import office_model
 from app.api.v2 import database
-from app.api.v2.utils.validator import validate_office_json_keys, return_error, validate_string,validate_office_types
+from app.api.v2.utils.verify import verify_tokens
+from app.api.v2.models import user_model
+from app.api.v2.utils.validator import validate_office_json_keys, return_error, validate_string,validate_office_types, check_duplication
 office = office_model.Office()
-
+USER = user_model.User()
 
 office_route = Blueprint('office',__name__,url_prefix='/api/v2/')
 @office_route.route('offices',methods=['POST'])
 def save():
     """ Add a new political office to the database """
+
+      # check if is admin
+    user_email, user_id = verify_tokens()
+
+    if(USER.check_if_admin(user_id) == False):
+        return return_error(401,"Must be an admin to delete party")
+
+
 
     json_key_errors = validate_office_json_keys(request)
 
@@ -44,6 +54,8 @@ def save():
     if(office_type == ""):
         return return_error(400,"Office_type cannot be empty")
 
+      #check if party with same name exists, if true, abort
+    check_duplication("name","offices", name)
 
     office.save(name, office_type)
 
@@ -105,6 +117,11 @@ def update(office_id):
     """
         edit a political office
     """
+    user_email, user_id = verify_tokens()
+
+    if(USER.check_if_admin(user_id) == False):
+        return return_error(401,"Must be an admin to delete party")
+
     json_key_errors = validate_office_json_keys(request)
 
     if json_key_errors:
@@ -135,21 +152,30 @@ def update(office_id):
         return return_error(400,"Office_type cannot be empty")
 
     office = office_model.Office()
+
+       #check if party with same name exists, if true, abort
+    check_duplication("name","offices", name)
+
     office.update(id, name, office_type )
 
     return make_response(jsonify({
-            "status": 201,
+            "status": 200,
             "office": {
                 "name":name,
                 "hqaddress": office_type
             }
-        }), 201)
+        }), 200)
 
 @office_route.route('offices/<int:office_id>',methods=['DELETE'])
 def delete(office_id):
     """
         delete a political office
     """
+    user_email, user_id = verify_tokens()
+
+    if(USER.check_if_admin(user_id) == False):
+        return return_error(401,"Must be an admin to delete party")
+
     query = """SELECT * FROM offices WHERE office_id = {} """.format(office_id)
     office = database.select_from_db(query)
         
