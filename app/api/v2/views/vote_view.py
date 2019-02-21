@@ -25,7 +25,9 @@ def save():
         })),400  
     createdOn = datetime.datetime.utcnow()
     createdBy = user_id
-    candidate = data["candidate"] 
+    candidate = data["candidate"]
+
+
 
     if(validate_ints(candidate) == False):
         return return_error(400, "candidate data must be of type integer")
@@ -63,7 +65,7 @@ def save():
             }
         }), 201)
 
-@vote_route.route('',methods=['GET'])
+@vote_route.route('votes',methods=['GET'])
 def get_votes():
     """
         get all the votes
@@ -77,14 +79,11 @@ def get_votes():
 
         return make_response(jsonify({
             'status':404,
-            'msg':'there are no registered aspirants yet'
+            'msg':'Voting hasnt begun'
         }),404)
     
-    response = jsonify({
-            'message': "Successfully fetched all the offices",
-            'products': all_votes
-            })
-
-    response.status_code = 200
-    return response
+    return make_response(jsonify({
+        'status':200,
+        'data':all_votes
+    }))
 

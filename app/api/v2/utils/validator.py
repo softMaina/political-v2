@@ -1,10 +1,18 @@
+"""
+Implement data validations
+"""
+
 import re
 from flask import jsonify, make_response,abort
 from validate_email import validate_email
 from app.api.v2 import database
 
 def format_response(status_code, msg, data=list()):
-
+    """
+    Method to format responses in a json format
+    :params: status_code, message, data
+    :response: json object
+    """
     response = {
         "status":status_code,
         "message": msg,
@@ -13,8 +21,9 @@ def format_response(status_code, msg, data=list()):
     return make_response(jsonify(response),status_code)
 
 def check_duplication(column, table, value):
-    """Checks for a value duplication
-
+    """
+    Method to check for a value duplication
+    :params: table column, table and variable value
     Aborts if there is a duplication
     """
     
@@ -25,8 +34,9 @@ def check_duplication(column, table, value):
     duplicated = database.select_from_db(query)
 
     if duplicated:
-        abort(make_response(jsonify(
-            message="Record already exists in the database"), 400))
+        abort(make_response(jsonify({
+            "status":400,
+            "error":"Record already exists in the database"}), 400))
 
 def validate_credentials(self, data):
     """Validate email, password and role fields"""
@@ -55,17 +65,31 @@ def validate_credentials(self, data):
         abort(400, Message)
 
 def sanitize_input(input_data):
-    """ check if input is of alphanumeric characters """
+    """ 
+    Method to sanitize data input
+    :params: user_data
+    Check if it is alphanumeric
+    :response: True, False 
+    """
     if input_data.isalpha() == False:
         return False
+
 def validate_ints(data):
-    """ensures that data is of integer data type"""
+    """
+    Method to validate data of type integer
+    :params: data
+    :response: True, False
+    """
     if not isinstance(data, int):
         return False
     return True
 
 def validate_string(data):
-    """ Ensure data is of a string data type """
+    """
+    Method to validate data of type string
+    :params: user input
+    :response: True, False 
+    """
     if not isinstance(data, str):
         return False
     return True
@@ -87,6 +111,11 @@ def check_is_valid_url(url):
     return False
 
 def validate_party_json_keys(request):
+    """
+    Method to validate request keys
+    :params: request
+    :response: error array
+    """
     request_keys = ["name", "hqaddress", "logoUrl"]
     errors = []
     for key in request_keys:
@@ -95,6 +124,11 @@ def validate_party_json_keys(request):
     return errors
 
 def validate_office_json_keys(request):
+    """
+    Method to validate request keys
+    :params: request
+    :response: error array
+    """
     request_keys = ["name","office_type"]
 
     errors = []
@@ -104,6 +138,11 @@ def validate_office_json_keys(request):
     return errors
 
 def validate_phone_number(phone_number):
+    """
+    Method to validate phone number
+    :params: phone number 
+    :response: boolean
+    """
     if len(phone_number) != 10:
         return False 
     if not phone_number.isdigit():
@@ -111,19 +150,64 @@ def validate_phone_number(phone_number):
     return True
 
 def return_error(status_code, message):
-    """ function to format response """
+    """
+    Method to format error message
+    :params: status_code, error message
+    :response: json object
+    """
     response = {
         "status":status_code,
         "error": message
     }
     return make_response(jsonify(response),status_code)
+
 def validate_alphabets(user_input):
+    """
+    Method to validate that a string contains letters only
+    :response:boolean
+    :params: user data, string
+    """
     if not user_input.isalpha():
         return False
     return True
 
 def validate_office_types(office_type):
+    """
+    Method to validate office types
+    :params: office type
+    :response: boolean
+    """
     office_types = ["local","federal","state", "legistlative"]
     if office_type not in office_types:
         return False
     return True
+def validate_user_json_keys(request):
+
+    request_keys = ["firstname", "lastname", "othername","email","phoneNumber","password","passportUrl"]
+    errors = []
+
+    for key in request_keys:
+        if not key in request.json:
+            errors.append(key)
+    return errors
+def check_if_admin_key(request):
+    admin_key = ["isAdmin","isAdmin","isAdmin","isAdmin","isAdmin","isAdmin","isAdmin","isAdmin","isAdmin"]
+    
+    for key in admin_key:
+        if not key in request.json:
+            return False
+    return True
+
+def validate_candidate_json_keys(request):
+    """
+    Method to validate request keys
+    :params: request
+    :response: error array
+    """
+    request_keys = ["office","party"]
+
+    errors = []
+    for key in request_keys:
+        if not key in request.json:
+            errors.append(key)
+    return errors

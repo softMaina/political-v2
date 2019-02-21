@@ -1,7 +1,7 @@
 from flask import Flask, make_response, abort, jsonify, Blueprint,request
 from app.api.v2.models import candidate_model
 from app.api.v2 import database
-from app.api.v2.utils.validator import return_error
+from app.api.v2.utils.validator import return_error, validate_candidate_json_keys
 from app.api.v2.utils.verify import verify_tokens
 
 
@@ -14,9 +14,13 @@ def save():
      add a candidate
     """
 
-    
 
     user_email, user_id = verify_tokens()
+
+    json_keys =validate_candidate_json_keys(request)
+
+    if json_keys:
+        return return_error(400, "Missing keys {}".format(json_keys))
 
     try:
         data = request.get_json(force=True)
@@ -68,6 +72,8 @@ def save():
 
 @candidate_route.route('candidates/<int:candidate_id>',methods=['PUT'])
 def update(candidate_id): 
+    user_email, user_id = verify_tokens()
+
     try:
         data = request.get_json(force=True)
     except:
@@ -94,6 +100,9 @@ def update(candidate_id):
 
 @candidate_route.route('candidates',methods=['GET'])
 def get_candidates():
+    user_email, user_id = verify_tokens()
+
+    user_email, user_id = verify_tokens()
 
     candidates = candidate_model.Candidate()
 
@@ -106,8 +115,9 @@ def get_candidates():
         }),404)
     
     response = jsonify({
-            'message': "Successfully fetched all the offices",
-            'products': aspirants
+            "status":200,
+            'message': "Successfully fetched all the candidates",
+            'candidates': aspirants
             })
 
     response.status_code = 200
@@ -115,6 +125,7 @@ def get_candidates():
 
 @candidate_route.route('candidates/<int:candidate_id>',methods=['DELETE'])
 def delete(candidate_id):
+    user_email, user_id = verify_tokens()
     query = """SELECT * FROM candidates WHERE candidate_id = {} """.format(candidate_id)
     office = database.select_from_db(query)
         
@@ -132,6 +143,9 @@ def delete(candidate_id):
 
 @candidate_route.route('candidates/<int:candidate_id>',methods=['GET'])
 def get_specific_candidate(candidate_id):
+
+    user_email, user_id = verify_tokens()
+
     query = """SELECT * FROM candidates WHERE candidate_id = '{}'""".format(candidate_id)
 
     candidate = database.select_from_db(query)

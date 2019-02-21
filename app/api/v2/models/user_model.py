@@ -58,3 +58,16 @@ class User():
             return False
         
         return True
+    @staticmethod
+    def check_if_admin(user_id):
+
+        query = """SELECT * FROM users WHERE user_id = '{}'""".format(user_id)
+
+        user_data = database.select_from_db(query)
+        
+        isAdmin = user_data[0]['isadmin']
+
+        if(isAdmin == True):
+            return True
+        
+        return False

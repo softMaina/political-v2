@@ -10,8 +10,8 @@ from flask_jwt_extended import (
     get_jwt_identity
 )
 from instance import config
-from app.api.v2.utils.validator import format_response, check_duplication,validate_credentials, validate_phone_number
-from app.api.v2.utils.validator import return_error, validate_string, validate_alphabets, check_is_valid_url
+from app.api.v2.utils.validator import format_response, check_duplication,validate_credentials, validate_phone_number, check_if_admin_key
+from app.api.v2.utils.validator import return_error, validate_string, validate_alphabets, check_is_valid_url,validate_user_json_keys
 from app.api.v2.models import user_model
 from validate_email import validate_email
 
@@ -26,25 +26,28 @@ def register():
     """
     method to register user and add them into the database
     """
+    user_json_keys = validate_user_json_keys(request)
 
+    if user_json_keys:
+        return return_error(400, "Missing keys in your payload {}".format(user_json_keys))
+  
     data = request.get_json()
 
     if not data:
         return format_response(400,"Missing credentials")
-
     
     try:
         email = data["email"]
     except KeyError:
         return make_response(jsonify({
-                    "error": "Please supply an email to be able to register an attendant"
+                    "error": "Please supply an email to be able to create an account"
                     }), 400)
 
     try:
         request_password = data["password"]
     except KeyError:
         return make_response(jsonify({
-                    "error": "Please supply a password to be able to register an attendant"
+                    "error": "Please supply a password to be able to create an account"
                     }), 400)
 
     if not isinstance(data["email"], str):
@@ -91,15 +94,31 @@ def register():
 
     # validate_credentials(self,data)
     check_duplication("email", "users", email)
+    check_duplication("phonenumber","users",phoneNumber)
     # hash the user password
     hashed_password = generate_password_hash(request_password, method='sha256')
 
-    user.save_user(firstname,lastname,othername,email,phoneNumber,passportUrl,hashed_password, False)
+    isAdmin = check_if_admin_key(request)
+    if(isAdmin == True):
+        users = user.save_user(firstname,lastname,othername,email,phoneNumber,passportUrl,hashed_password, isAdmin)
+        return make_response(jsonify({
+            "status":200,
+            "message": "Admin created successfully",
+            "data":users
+        }),200)
+
+
+
+        
+    users = user.save_user(firstname,lastname,othername,email,phoneNumber,passportUrl,hashed_password, False)
 
     return make_response(jsonify({
-        "status":201,
-        "error":"user successfully created"
-    }),201)
+            "status":201,
+            "message":"user successfully created",
+            "data":users
+        }),201)
+   
+
     
 @auth_route.route('/login',methods=['POST'])
 def login():
@@ -156,6 +175,6 @@ def login():
 
     return make_response(jsonify({
         "error": "Try again. E-mail or password is incorrect!",
-        "status":403
+        "status":401
     }
-    ), 403)
+    ), 401)
