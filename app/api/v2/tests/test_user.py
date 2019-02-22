@@ -33,7 +33,10 @@ class TestUsers(base_tests.TestBaseClass):
 
         self.assertEqual(response.status_code,401)
     
+<<<<<<< HEAD
     
+=======
+>>>>>>> 330ca92dafadd2d1e32711a8aeea12239749ae44
     def test_missing_keys(self):
         response = self.app_test_client.post('/api/v2/auth/signup',json=self.user_missing_Key)
 

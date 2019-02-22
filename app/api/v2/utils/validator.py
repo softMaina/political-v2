@@ -211,3 +211,10 @@ def validate_candidate_json_keys(request):
         if not key in request.json:
             errors.append(key)
     return errors
+
+def sanitize_data(data):
+    errors=[]
+    for item in data:
+        if item == "":
+            errors.append(item)
+    return errors

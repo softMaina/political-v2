@@ -67,13 +67,17 @@ class TestVotes(base_tests.TestBaseClass):
 
         self.assertEqual(response1.status_code, 201)
     
-    # def test_get_votes(self):
- 
-    #     post_candidate = self.add_candidate()
-    #     response2 = self.app_test_client.post('api/v2/votes',json={
-    #         "candidate":1
-    #     }, headers=dict(Authorization = self.log_voter()))
+    def test_vote_empty_data(self):
+        response = self.app_test_client.post('api/v2/votes',json={
+            "candidate":1
+        }, headers=dict(Authorization = self.log_user()),content_type="text")
 
-    #     response = self.app_test_client.get('api/v2/votes')
+        self.assertEqual(response.status_code, 400)
 
-    #     self.assertEqual(response.status_code, 200)
+    def test_vote_string_data(self):
+        response = self.app_test_client.post('api/v2/votes',json={
+            "candidate":"one"
+        }, headers=dict(Authorization = self.log_user()),content_type="text")
+
+        self.assertEqual(response.status_code, 400)
+
