@@ -70,34 +70,6 @@ def save():
         }), 201)
 
 
-@candidate_route.route('candidates/<int:candidate_id>',methods=['PUT'])
-def update(candidate_id): 
-    user_email, user_id = verify_tokens()
-
-    try:
-        data = request.get_json(force=True)
-    except:
-        return make_response(jsonify({
-            'status':400,
-            'msg':'data should be in json format'
-        }),400)  
-    id=candidate_id
-    office = data["office"]
-    party = data["party"]
-    user = data["user"]
-
-    
-    CANDIDATE.update(id, office, party, user)
-
-    return make_response(jsonify({
-            "message": "office updated successfully",
-            "office": {
-                "office":office,
-                "party": party,
-                "user":user
-            }
-        }), 201)
-
 @candidate_route.route('candidates',methods=['GET'])
 def get_candidates():
     user_email, user_id = verify_tokens()

@@ -59,6 +59,8 @@ def register():
         return make_response(jsonify({
                     "error": "Password should be a string"
                     }), 400)
+    email = data["email"]
+    request_password = data["password"]
     firstname = data["firstname"]
     lastname = data["lastname"]
     othername = data["othername"]

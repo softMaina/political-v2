@@ -41,6 +41,14 @@ class TestBaseClass(unittest.TestCase):
             "password":"password",
             "passportUrl":"www.img.com/passport"
         }
+        self.user_missing_Key = {
+            "firstname":"dffewf",
+            "lastname" :"Fdfdsa",
+            "othername":"asfdfdsa",
+            "email":"www@gmail.com",
+            "phoneNumber":"4444478043",
+            "password":"password"
+        }
         self.Admin = {
             "firstname":"dffewf",
             "lastname" :"Fdfdsa",

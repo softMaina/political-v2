@@ -32,3 +32,37 @@ class TestUsers(base_tests.TestBaseClass):
         response = self.app_test_client.post('/api/v2/auth/login',json=self.user_login_wrong)
 
         self.assertEqual(response.status_code,401)
+    
+    def test_missing_keys(self):
+        response = self.app_test_client.post('/api/v2/auth/signup',json=self.user_missing_Key)
+
+        self.assertEqual(response.status_code,400)
+    def test_missing_data(self):
+        response = self.app_test_client.post('/api/v2/auth/signup',json={})
+
+        self.assertEqual(response.status_code,400)
+    def test_int_email(self):
+        response = self.app_test_client.post('/api/v2/auth/signup',json={
+            "firstname":"dffewf",
+            "lastname" :"Fdfdsa",
+            "othername":"asfdfdsa",
+            "email":1,
+            "phoneNumber":"4444478043",
+            "password":"password",
+            "passportUrl":"www.img.com/passport"
+        })
+
+        self.assertEqual(response.status_code,400)
+
+    def test_int_password(self):
+        response = self.app_test_client.post('/api/v2/auth/signup',json={
+            "firstname":"dffewf",
+            "lastname" :"Fdfdsa",
+            "othername":"asfdfdsa",
+            "email":"email",
+            "phoneNumber":"4444478043",
+            "password":1,
+            "passportUrl":"www.img.com/passport"
+        })
+
+        self.assertEqual(response.status_code,400)
