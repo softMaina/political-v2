@@ -65,8 +65,7 @@ For this endpoint, minimum data requirements are as follows
 ```
   {
 	"office":Integer,
-	"party":Integer,
-	"user": Integer
+	"party":Integer
  }
 ```
 ## Sign up endpoints
