@@ -5,12 +5,12 @@ from app.api.v2.tests import base_tests
 from . import helper_functions
 from app.api.v2.tests.helper_functions import convert_response_to_json
 
+
 class TestCandidates(base_tests.TestBaseClass):
     """
     A class to test candidate's endpoints
     :param: object of the TestBaseClass
     """
-
 
     def register_user(self):
         """
@@ -18,9 +18,7 @@ class TestCandidates(base_tests.TestBaseClass):
         :Response: status 201, data, user_data
         """
         response = self.app_test_client.post('api/v2/auth/register', json=self.Admin)
-        
         return response.status_code
-
 
     def log_user(self):
         """
@@ -31,11 +29,10 @@ class TestCandidates(base_tests.TestBaseClass):
         response = self.app_test_client.post('/api/v2/auth/login',json=self.admin_login)
 
         token = convert_response_to_json(response)['token']
-        return token
-
-        
+        return token        
 
     def test_candidate(self):
+
         """
         Method to test candidate registration
         """
@@ -82,3 +79,38 @@ class TestCandidates(base_tests.TestBaseClass):
         response = self.app_test_client.post('api/v2/candidates',json=self.Candidate, headers=dict(Authorization = self.log_user()), content_type='application/json')
 
         self.assertEqual(response.status_code,400)
+    def test_candidate_with_missing_keys(self):
+        """
+        Test add office with missing keys 
+        """
+        add_party = self.app_test_client.post('api/v2/parties',json=self.PARTY, headers=dict(Authorization = self.log_user()))
+        add_office = self.app_test_client.post('api/v2/offices',json=self.OFFICE, headers=dict(Authorization = self.log_user()))
+        response = self.app_test_client.post('api/v2/candidates',json={
+            "office":1
+        }, headers=dict(Authorization = self.log_user()), content_type='application/json')
+
+        self.assertEqual(response.status_code, 400)
+    def test_candidate_with_string(self):
+        """
+        Test add office with missing keys 
+        """
+        add_party = self.app_test_client.post('api/v2/parties',json=self.PARTY, headers=dict(Authorization = self.log_user()))
+        add_office = self.app_test_client.post('api/v2/offices',json=self.OFFICE, headers=dict(Authorization = self.log_user()))
+        response = self.app_test_client.post('api/v2/candidates',json={
+            "office":"one",
+            "party":1
+        }, headers=dict(Authorization = self.log_user()), content_type='application/json')
+
+        self.assertEqual(response.status_code, 400)
+    def test_candidate_with_party_string(self):
+        """
+        Test add office with missing keys 
+        """
+        add_party = self.app_test_client.post('api/v2/parties',json=self.PARTY, headers=dict(Authorization = self.log_user()))
+        add_office = self.app_test_client.post('api/v2/offices',json=self.OFFICE, headers=dict(Authorization = self.log_user()))
+        response = self.app_test_client.post('api/v2/candidates',json={
+            "office":1,
+            "party":"one"
+        }, headers=dict(Authorization = self.log_user()), content_type='application/json')
+
+        self.assertEqual(response.status_code, 400)

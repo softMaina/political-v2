@@ -65,15 +65,14 @@ def save():
             }
         }), 201)
 
-@vote_route.route('votes',methods=['GET'])
-def get_votes():
+@vote_route.route('votes/<int:office_id>',methods=['GET'])
+def get_votes(office_id):
     """
-        get all the votes
-    """
+        get all the votes    """
 
     votes = vote_model.Vote()
 
-    all_votes = votes.fetch_all_votes()
+    all_votes = votes.fetch_all_votes(office_id)
 
     if not all_votes:
 
