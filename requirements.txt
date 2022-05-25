@@ -12,7 +12,7 @@ itsdangerous==1.1.0
 Jinja2==2.10
 MarkupSafe==1.1.0
 psycopg2==2.7.7
-PyJWT==1.7.1
+PyJWT==2.4.0
 requests==2.21.0
 urllib3==1.24.1
 validate-email==1.3
